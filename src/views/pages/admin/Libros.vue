@@ -89,6 +89,14 @@
                 </DataTable>
 
 				<Dialog v-model:visible="createDialog" :style="{ width: '450px' }" header="Crear nuevo libro" :modal="true" class="p-fluid">
+					<Message severity="error" :closable="false" icon="" v-show="errors?.length > 0">
+						<ul>
+							<li v-for="error in errors" :key="error">
+								{{ error }}
+							</li>
+						</ul>
+					</Message>
+
 					<div class="field">
                         <label for="estado" class="mb-3">Estado</label>
                         <Dropdown id="estado" v-model="book.estado" :options="statuses" optionLabel="label" placeholder="Selecciona un estado">
@@ -164,6 +172,20 @@
                         <Button label="Save" icon="pi pi-check" class="p-button-text" @click="saveItem" />
                     </template>
                 </Dialog>
+
+				<Dialog v-model:visible="deleteDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
+                    <div class="flex align-items-center justify-content-center">
+                        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+                        <span v-if="book"
+                            >¿Estás seguro de que quieres eliminar <b>{{ book?.titulo }}</b
+                            >?</span
+                        >
+                    </div>
+                    <template #footer>
+                        <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteDialog = false" />
+                        <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteItem" />
+                    </template>
+                </Dialog>
 			</div>
 		</div>
     </div>
@@ -188,10 +210,12 @@ export default {
 				idioma: null,
 				estado: null,
 			},
+			errors: [],
 			selectedBooks: null,
             filters: {},
             submitted: false,
 			createDialog: false,
+			deleteDialog: false,
             statuses: [
 				{label: 'DISPONIBLE', value: 'DISPONIBLE'},
 				{label: 'PRESTADO', value: 'PRESTADO'},
@@ -226,36 +250,54 @@ export default {
 		},
 		confirmDeleteItem(book) {
 			this.book = book;
-			this.deleteProductDialog = true;
+			this.deleteDialog = true;
 		},
 
 
 		async saveItem() {
 			this.submitted = true;
+			this.errors = [];
 
-			if (this.book.titulo.trim()) {
-				if (this.book.id) {
-					let index = this.findIndexById(this.book.id);
+			if (this.book?.titulo?.trim()) {
+				if (this.book.idLibro) {
+					await this.ApiService.put('libros/'+this.book?.idLibro, this.book).then((response) => {
+						console.log(response);
 
-					this.books[index] = this.book;
-					this.$toast.add({severity:'success', summary: 'Successful', detail: 'Book Updated', life: 3000});
+						this.$toast.add({severity:'success', summary: 'Successful', detail: 'Book Updated', life: 3000});
+
+						this.createDialog = false;
+						this.book = {};
+					}).catch((error) => {
+						this.errors = error.response.data.errors.errors;
+						this.$toast.add({severity:'error', summary: 'Error', detail: 'Book not Created', life: 3000});
+					});
 				}
 				else {
-					const response = await this.ApiService.post('libros', this.book);
-					console.log(response);
-
-					this.books = [...this.books];
-
-					this.$toast.add({severity:'success', summary: 'Successful', detail: 'Book Created', life: 3000});
-				}
-
-				// this.books = [...this.books];
-				this.createDialog = false;
-				this.book = {};
+					await this.ApiService.post('libros', this.book).then((response) => {
+						console.log(response);
+						this.books.push(response?.data);
+						this.$toast.add({severity:'success', summary: 'Successful', detail: 'Book Created', life: 3000});
+						this.createDialog = false;
+						this.book = {};
+					}).catch((error) => {
+						this.errors = error.response.data.errors.errors;
+						this.$toast.add({severity:'error', summary: 'Error', detail: 'Book not Created', life: 3000});
+					});
+				}				
 			}
 		},
 
-
+		async deleteItem(){
+			await this.ApiService.delete('libros/'+this.book?.idLibro).then((response) => {
+				console.log(response);
+				this.$toast.add({severity:'success', summary: 'Successful', detail: 'Book Deleted', life: 3000});
+				this.deleteDialog = false;
+				this.book = {};
+			}).catch((error) => {
+				this.errors = error.response.data.errors.errors;
+				this.$toast.add({severity:'error', summary: 'Error', detail: 'Book not Deleted', life: 3000});
+			});
+		},
 
 		hideDialog() {
             this.createDialog = false;

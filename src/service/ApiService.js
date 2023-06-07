@@ -35,17 +35,23 @@ export default class ApiService {
         return response.data;
     }
 
-    async post(url, body) {
-        const response = await axios.post(`${_baseUrl}${url}`, body);
-      
-        return response.data;
-    }
-
     async get(url) {
         const response = await axios.get(`${_baseUrl}${url}`);
       
         return response.data;
     }
+
+    async post(url, body) {
+        return await axios.post(`${_baseUrl}${url}`, body);
+    }
+
+    async put(url, body) {
+        return await axios.put(`${_baseUrl}${url}`, body);
+    }
+
+    async delete(url, body) {
+        return await axios.delete(`${_baseUrl}${url}`, body);
+    }    
 
     getCustomersSmall() {
         return fetch('demo/data/customers-small.json').then(res => res.json())
