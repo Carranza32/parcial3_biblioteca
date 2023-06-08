@@ -18,21 +18,15 @@ export default class ApiService {
     }
     
     async postWithToken(url, body) {
-        const response = await axios.post(`${_baseUrl}${url}`, body, config);
-      
-        return response.data;
+        return await axios.post(`${_baseUrl}${url}`, body, config);
     }
       
     async putWithToken(url, body) {
-        const response = await axios.put(`${_baseUrl}${url}`, body, config);
-      
-        return response.data;
+        return await axios.put(`${_baseUrl}${url}`, body, config);
     }
       
     async deleteWithToken(url) {
-        const response = await axios.delete(`${_baseUrl}${url}`, config);
-      
-        return response.data;
+        return await axios.delete(`${_baseUrl}${url}`, config);
     }
 
     async get(url) {

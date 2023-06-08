@@ -85,52 +85,40 @@
 						</ul>
 					</Message>
 
-					<div class="field">
-                        <label for="estado" class="mb-3">Estado</label>
-                        <Dropdown id="estado" v-model="book.estado" :options="statuses" optionLabel="label" placeholder="Selecciona un estado">
-                            <template #value="slotProps">
-                                <div v-if="slotProps.value && slotProps.value.value">
-                                    <span :class="'product-badge status-' + slotProps.value.value">{{ slotProps.value.label }}</span>
-                                </div>
-                                <div v-else-if="slotProps.value && !slotProps.value.value">
-                                    <span :class="'product-badge status-' + slotProps.value.toLowerCase()">{{ slotProps.value }}</span>
-                                </div>
-                                <span v-else>
-                                    {{ slotProps.placeholder }}
-                                </span>
-                            </template>
-                        </Dropdown>
-                    </div>
-
                     <div class="field">
-                        <label for="titulo">Título</label>
-                        <InputText id="titulo" v-model.trim="book.titulo" required="true" autofocus :class="{ 'p-invalid': submitted && !book.titulo }" />
-                        <small class="p-invalid" v-if="submitted && !book.titulo">Name is required.</small>
+                        <label for="nombre">Nombres</label>
+                        <InputText id="nombre" v-model.trim="user.nombre" required="true" autofocus :class="{ 'p-invalid': submitted && !user.nombre }" />
+                        <small class="p-invalid" v-if="submitted && !user.nombre">Name is required.</small>
                     </div>
                     <div class="field">
-                        <label for="autor">Autor</label>
-                        <InputText id="autor" v-model.trim="book.autor" required="true" autofocus :class="{ 'p-invalid': submitted && !book.autor }" />
-                        <small class="p-invalid" v-if="submitted && !book.autor">Name is required.</small>
+                        <label for="apellido">Apellidos</label>
+                        <InputText id="apellido" v-model.trim="user.apellido" required="true" autofocus :class="{ 'p-invalid': submitted && !user.apellido }" />
+                        <small class="p-invalid" v-if="submitted && !user.apellido">Name is required.</small>
                     </div>
                     <div class="field">
-                        <label for="editorial">Editorial</label>
-                        <InputText id="editorial" v-model.trim="book.editorial" required="true" autofocus :class="{ 'p-invalid': submitted && !book.editorial }" />
-                        <small class="p-invalid" v-if="submitted && !book.editorial">Name is required.</small>
+                        <label for="email">Email</label>
+                        <InputText id="email" v-model.trim="user.email" required="true" autofocus :class="{ 'p-invalid': submitted && !user.email }" />
+                        <small class="p-invalid" v-if="submitted && !user.email">Name is required.</small>
                     </div>
                     <div class="field">
-                        <label for="anio">Año</label>
-                        <InputText id="anio" v-model.trim="book.anio" required="true" autofocus :class="{ 'p-invalid': submitted && !book.anio }" />
-                        <small class="p-invalid" v-if="submitted && !book.anio">Name is required.</small>
+                        <label for="dui">DUI</label>
+                        <InputText id="dui" v-model.trim="user.dui" required="true" autofocus :class="{ 'p-invalid': submitted && !user.dui }" />
+                        <small class="p-invalid" v-if="submitted && !user.dui">Name is required.</small>
                     </div>
                     <div class="field">
-                        <label for="genero">Género</label>
-                        <InputText id="genero" v-model.trim="book.genero" required="true" autofocus :class="{ 'p-invalid': submitted && !book.genero }" />
-                        <small class="p-invalid" v-if="submitted && !book.genero">Name is required.</small>
+                        <label for="direccion">Direccion</label>
+                        <InputText id="direccion" v-model.trim="user.direccion" required="true" autofocus :class="{ 'p-invalid': submitted && !user.direccion }" />
+                        <small class="p-invalid" v-if="submitted && !user.direccion">Name is required.</small>
                     </div>
                     <div class="field">
-                        <label for="idioma">Idioma</label>
-                        <InputText id="idioma" v-model.trim="book.idioma" required="true" autofocus :class="{ 'p-invalid': submitted && !book.idioma }" />
-                        <small class="p-invalid" v-if="submitted && !book.idioma">Name is required.</small>
+                        <label for="telefono">Telefono</label>
+                        <InputText id="telefono" v-model.trim="user.telefono" required="true" autofocus :class="{ 'p-invalid': submitted && !user.telefono }" />
+                        <small class="p-invalid" v-if="submitted && !user.telefono">Name is required.</small>
+                    </div>
+                    <div class="field">
+                        <label for="password">Contrasena</label>
+                        <InputText id="password" v-model.trim="user.password" required="true" autofocus :class="{ 'p-invalid': submitted && !user.password }" />
+                        <small class="p-invalid" v-if="submitted && !user.password">Name is required.</small>
                     </div>
 
                     <!-- <div class="field">
@@ -164,8 +152,8 @@
 				<Dialog v-model:visible="deleteDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
                     <div class="flex align-items-center justify-content-center">
                         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-                        <span v-if="book"
-                            >¿Estás seguro de que quieres eliminar <b>{{ book?.titulo }}</b
+                        <span v-if="user"
+                            >¿Estás seguro de que quieres eliminar <b>{{ user?.nombre }}</b
                             >?</span
                         >
                     </div>
