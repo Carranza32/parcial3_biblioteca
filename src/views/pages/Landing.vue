@@ -2,6 +2,7 @@
 
 <template>
     <div class="surface-0 flex justify-content-center">
+	<Toast />
         <div id="home" class="landing-wrapper overflow-hidden">
             <div class="py-4 px-4 mx-0 md:mx-6 lg:mx-8 lg:px-8 flex align-items-center justify-content-between relative lg:static mb-3">
                 <a class="flex align-items-center" href="#"> <img :src="logoUrl" alt="Sakai Logo" height="50" class="mr-0 lg:mr-2" /><span class="text-900 font-medium text-2xl line-height-3 mr-8">SAKAI</span> </a>
@@ -32,8 +33,7 @@
                         </li>
                     </ul>
                     <div class="flex justify-content-between lg:block border-top-1 lg:border-top-none surface-border py-3 lg:py-0 mt-3 lg:mt-0">
-                        <Button label="Login" class="p-button-text p-button-rounded border-none font-light line-height-2 text-blue-500"></Button>
-                        <Button label="Register" class="p-button-rounded border-none ml-5 font-light text-white line-height-2 bg-blue-500"></Button>
+                        <Button label="Cerrar sesion" @click="logOut()" class="p-button-text p-button-rounded border-none font-light line-height-2 text-blue-500"></Button>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
 														<i class="pi pi-tag"></i>
 														<span class="font-semibold">{{ slotProps.data.genero }}</span>
 													</span>
-													<Tag :value="slotProps.data.estado" :severity="getSeverity(slotProps.data.estado)"></Tag>
+													<!-- <Tag :value="slotProps.data.estado" :severity="getSeverity(slotProps.data.estado)"></Tag> -->
 												</div>
 												<span class="flex align-items-center gap-2">
 													<i class="pi pi-map"></i>
@@ -104,7 +104,7 @@
 												<i class="pi pi-tag"></i>
 												<span class="font-semibold">{{ slotProps.data.genero }}</span>
 											</div>
-											<Tag :value="slotProps.data.estado" :severity="getSeverity(slotProps.data.estado)"></Tag>
+											<!-- <Tag :value="slotProps.data.estado" :severity="getSeverity(slotProps.data.estado)"></Tag> -->
 										</div>
 										<div class="flex flex-column align-items-center gap-3 py-5">
 											<img class="w-9 shadow-2 border-round" src="https://edit.org/photos/img/blog/wdn-editar-portadas-de-libros-gratis.jpg-840.jpg" :alt="slotProps.data.name" />
@@ -188,7 +188,7 @@
 
 				<template #footer>
 					<Button label="No" icon="pi pi-times" @click="detailDialog = false" text />
-					<Button label="Prestar" icon="pi pi-check" @click="detailDialog = false" autofocus />
+					<Button label="Prestar" icon="pi pi-check" @click="prestamo()" autofocus />
 				</template>
 			</Dialog>
         </div>
@@ -234,6 +234,39 @@ export default {
 		showDetail(data) {
 			this.book = data;
 			this.detailDialog = true;
+		},
+		async prestamo() {
+			this.detailDialog = false;
+			let user = JSON.parse(localStorage.getItem('user'));
+			console.log(user, this.book);
+
+			const datenumbers = new Date().setDate(new Date().getDate() + 7)
+			const date = new Date(datenumbers);
+
+
+			await this.ApiService.post('prestamos', {
+				idUsuario: user.idUsuario,
+				idLibro: this.book.idLibro,
+				fecha_devolucion: `${date.getFullYear()}-0${date.getMonth() + 1}-${date.getDate()}`
+			}).then((response) => {
+				console.log(response);
+
+				this.$toast.add({
+					severity: 'success',
+					summary: 'Prestamo exitoso',
+					detail: 'El libro se presto correctamente',
+					sticky: true
+				});
+			}).catch((error) => {
+				console.log(error);
+			});
+
+			
+		},
+		logOut() {
+			localStorage.removeItem('token');
+			localStorage.removeItem('user');
+			this.$router.push('/auth/login');
 		}
 	}
 }

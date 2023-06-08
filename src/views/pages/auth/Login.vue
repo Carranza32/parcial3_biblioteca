@@ -23,9 +23,17 @@ const login = () => {
 		// this.$router.push({ name: 'Login' });
 
 		if (data?.token != null || data?.token != undefined) {
-			localStorage.setItem('token', data?.token)
+			const user = JSON.stringify(data?.usuario);
+			console.log(user);
 
-			window.location.href = '/#/landing';
+			localStorage.setItem('token', data?.token)
+			localStorage.setItem('user', user)
+
+			if (data?.user?.role == 'ADMIN') {
+				window.location.href = '/#/admin/dashboard';
+			}else{
+				window.location.href = '/#/landing';
+			}
 		}else{
 			return
 		}

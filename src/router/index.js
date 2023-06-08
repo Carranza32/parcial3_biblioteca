@@ -26,12 +26,12 @@ const router = createRouter({
                 {
                     path: '/admin/multas',
                     name: 'charts',
-                    component: () => import('@/views/uikit/Chart.vue')
+                    component: () => import('@/views/pages/admin/Prestamos.vue')
                 },
                 {
                     path: '/admin/prestamos',
                     name: 'misc',
-                    component: () => import('@/views/uikit/Misc.vue')
+                    component: () => import('@/views/pages/admin/Prestamos.vue')
                 },
                 {
                     path: '/utilities/icons',
