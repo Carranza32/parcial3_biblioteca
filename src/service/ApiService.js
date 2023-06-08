@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const _baseUrl = 'http://localhost:8000/api/';
+// const _baseUrl = 'https://spring-api-production.up.railway.app/api/';
 
 const config = {
     headers: {

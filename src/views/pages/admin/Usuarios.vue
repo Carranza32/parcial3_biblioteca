@@ -76,7 +76,7 @@
                     </Column>
                 </DataTable>
 
-				<Dialog v-model:visible="createDialog" :style="{ width: '450px' }" header="Crear nuevo libro" :modal="true" class="p-fluid">
+				<Dialog v-model:visible="createDialog" :style="{ width: '450px' }" header="Crear nuevo usuario" :modal="true" class="p-fluid">
 					<Message severity="error" :closable="false" icon="" v-show="errors?.length > 0">
 						<ul>
 							<li v-for="error in errors" :key="error">
@@ -195,7 +195,7 @@ export default {
         this.initFilters();
     },
     async mounted() {
-        const response = await this.ApiService.getWithToken('usuarios');
+        const response = await this.ApiService.get('usuarios');
 
 		this.users = response
 		console.log(this.users);
@@ -226,44 +226,45 @@ export default {
 			this.submitted = true;
 			this.errors = [];
 
-			if (this.user?.titulo?.trim()) {
-				if (this.user.id_usuario) {
-					await this.ApiService.put('libros/'+this.user?.id_usuario, this.user).then((response) => {
+			if (this.user?.nombre?.trim()) {
+				if (this.user.idUsuario) {
+					await this.ApiService.put('usuarios/'+this.user?.idUsuario, this.user).then((response) => {
 						console.log(response);
 
-						this.$toast.add({severity:'success', summary: 'Successful', detail: 'user Updated', life: 3000});
+						// this.$toast.add({severity:'success', summary: 'Successful', detail: 'user Updated', life: 3000});
 
 						this.createDialog = false;
 						this.user = {};
 					}).catch((error) => {
 						this.errors = error.response.data.errors.errors;
-						this.$toast.add({severity:'error', summary: 'Error', detail: 'user not Created', life: 3000});
+						// this.$toast.add({severity:'error', summary: 'Error', detail: 'user not Created', life: 3000});
 					});
 				}
 				else {
-					await this.ApiService.post('libros', this.user).then((response) => {
+					await this.ApiService.post('usuarios', this.user).then((response) => {
 						console.log(response);
 						this.users.push(response?.data);
-						this.$toast.add({severity:'success', summary: 'Successful', detail: 'user Created', life: 3000});
+						// this.$toast.add({severity:'success', summary: 'Successful', detail: 'user Created', life: 3000});
 						this.createDialog = false;
 						this.user = {};
 					}).catch((error) => {
 						this.errors = error.response.data.errors.errors;
-						this.$toast.add({severity:'error', summary: 'Error', detail: 'user not Created', life: 3000});
+						// this.$toast.add({severity:'error', summary: 'Error', detail: 'user not Created', life: 3000});
 					});
 				}				
 			}
 		},
 
 		async deleteItem(){
-			await this.ApiService.delete('libros/'+this.user?.id_usuario).then((response) => {
+			await this.ApiService.delete('usuarios/'+this.user?.idUsuario).then((response) => {
 				console.log(response);
-				this.$toast.add({severity:'success', summary: 'Successful', detail: 'user Deleted', life: 3000});
+				// this.$toast.add({severity:'success', summary: 'Successful', detail: 'user Deleted', life: 3000});
 				this.deleteDialog = false;
 				this.user = {};
+				this.users = this.users.filter(val => val.idUsuario !== this.user?.idUsuario);
 			}).catch((error) => {
 				this.errors = error.response.data.errors.errors;
-				this.$toast.add({severity:'error', summary: 'Error', detail: 'user not Deleted', life: 3000});
+				// this.$toast.add({severity:'error', summary: 'Error', detail: 'user not Deleted', life: 3000});
 			});
 		},
 

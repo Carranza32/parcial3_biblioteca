@@ -97,7 +97,7 @@
 						</ul>
 					</Message>
 
-					<div class="field">
+					<!-- <div class="field">
                         <label for="estado" class="mb-3">Estado</label>
                         <Dropdown id="estado" v-model="book.estado" :options="statuses" optionLabel="label" placeholder="Selecciona un estado">
                             <template #value="slotProps">
@@ -112,8 +112,13 @@
                                 </span>
                             </template>
                         </Dropdown>
-                    </div>
+                    </div> -->
 
+                    <div class="field">
+                        <label for="stock">Stock</label>
+                        <InputText id="stock" v-model.trim="book.stock" required="true" autofocus :class="{ 'p-invalid': submitted && !book.stock }" />
+                        <small class="p-invalid" v-if="submitted && !book.stock">Name is required.</small>
+                    </div>
                     <div class="field">
                         <label for="titulo">Título</label>
                         <InputText id="titulo" v-model.trim="book.titulo" required="true" autofocus :class="{ 'p-invalid': submitted && !book.titulo }" />
@@ -144,28 +149,6 @@
                         <InputText id="idioma" v-model.trim="book.idioma" required="true" autofocus :class="{ 'p-invalid': submitted && !book.idioma }" />
                         <small class="p-invalid" v-if="submitted && !book.idioma">Name is required.</small>
                     </div>
-
-                    <!-- <div class="field">
-                        <label class="mb-3">Category</label>
-                        <div class="formgrid grid">
-                            <div class="field-radiobutton col-6">
-                                <RadioButton id="category1" name="category" value="Accessories" v-model="product.category" />
-                                <label for="category1">Accessories</label>
-                            </div>
-                            <div class="field-radiobutton col-6">
-                                <RadioButton id="category2" name="category" value="Clothing" v-model="product.category" />
-                                <label for="category2">Clothing</label>
-                            </div>
-                            <div class="field-radiobutton col-6">
-                                <RadioButton id="category3" name="category" value="Electronics" v-model="product.category" />
-                                <label for="category3">Electronics</label>
-                            </div>
-                            <div class="field-radiobutton col-6">
-                                <RadioButton id="category4" name="category" value="Fitness" v-model="product.category" />
-                                <label for="category4">Fitness</label>
-                            </div>
-                        </div>
-                    </div> -->
 
                     <template #footer>
                         <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog" />
@@ -208,7 +191,6 @@ export default {
 				anio: null,
 				genero: null,
 				idioma: null,
-				estado: null,
 			},
 			errors: [],
 			selectedBooks: null,
@@ -256,11 +238,13 @@ export default {
 
 		async saveItem() {
 			this.submitted = true;
-			this.errors = [];
+			this.errors = [];			
 
 			if (this.book?.titulo?.trim()) {
 				if (this.book.idLibro) {
-					await this.ApiService.put('libros/'+this.book?.idLibro, this.book).then((response) => {
+					const {estado, ...body} = this.book;
+					
+					await this.ApiService.put('libros/'+this.book?.idLibro, body).then((response) => {
 						console.log(response);
 
 						this.$toast.add({severity:'success', summary: 'Successful', detail: 'Book Updated', life: 3000});
@@ -273,7 +257,9 @@ export default {
 					});
 				}
 				else {
-					await this.ApiService.post('libros', this.book).then((response) => {
+					const {estado, ...body} = this.book;
+
+					await this.ApiService.post('libros', body).then((response) => {
 						console.log(response);
 						this.books.push(response?.data);
 						this.$toast.add({severity:'success', summary: 'Successful', detail: 'Book Created', life: 3000});
