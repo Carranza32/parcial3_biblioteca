@@ -30,7 +30,7 @@
                 >
                     <template #header>
                         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                            <h5 class="m-0">Libros</h5>
+                            <h5 class="m-0">Usuarios</h5>
                             <span class="block mt-2 md:mt-0 p-input-icon-left">
                                 <i class="pi pi-search" />
                                 <InputText v-model="filters['global'].value" placeholder="Search..." />
@@ -38,46 +38,34 @@
                         </div>
                     </template>
 
-                    <Column field="titulo" header="Título" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="nombre" header="Nombres" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">titulo</span>
-                            {{ slotProps.data.titulo }}
+                            <span class="p-column-title">nombre</span>
+                            {{ slotProps.data.nombre }} {{ slotProps.data.apellido }}
                         </template>
                     </Column>
-                    <Column field="autor" header="Autor" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="email" header="Correo" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">autor</span>
-                            {{ slotProps.data.autor }}
+                            <span class="p-column-title">email</span>
+                            {{ slotProps.data.email }}
                         </template>
                     </Column>
-                    <Column field="editorial" header="Editorial" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="dui" header="DUI" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">editorial</span>
-                            {{ slotProps.data.editorial }}
+                            <span class="p-column-title">dui</span>
+                            {{ slotProps.data.dui }}
                         </template>
                     </Column>
-                    <Column field="anio" header="Año" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="direccion" header="Direccion" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">anio</span>
-                            {{ slotProps.data.anio }}
+                            <span class="p-column-title">direccion</span>
+                            {{ slotProps.data.direccion }}
                         </template>
                     </Column>
-                    <Column field="genero" header="Género" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="telefono" header="Telefono" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">genero</span>
-                            {{ slotProps.data.genero }}
-                        </template>
-                    </Column>
-                    <Column field="idioma" header="Idioma" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">idioma</span>
-                            {{ slotProps.data.idioma }}
-                        </template>
-                    </Column>
-                    <Column field="estado" header="Estado" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-                        <template #body="slotProps">
-                            <span class="p-column-title">Status</span>
-                            <span :class="'product-badge status-' + (slotProps.data.inventoryStatus ? slotProps.data.inventoryStatus.toLowerCase() : '')">{{ slotProps.data.inventoryStatus }}</span>
+                            <span class="p-column-title">telefono</span>
+                            {{ slotProps.data.telefono }}
                         </template>
                     </Column>
                     <Column headerStyle="min-width:10rem;">
@@ -219,7 +207,7 @@ export default {
         this.initFilters();
     },
     async mounted() {
-        const response = await this.ApiService.get('usuarios');
+        const response = await this.ApiService.getWithToken('usuarios');
 
 		this.users = response
 		console.log(this.users);

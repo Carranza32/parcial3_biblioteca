@@ -18,13 +18,12 @@ const login = () => {
 	console.log(email.value, password.value, checked.value);
 
 	apiService.post('auth/login', { email: email.value, password: password.value }).then(({ data }) => {
-		console.log(data?.token);
+		console.log(data);
 		
 		// this.$router.push({ name: 'Login' });
 
 		if (data?.token != null || data?.token != undefined) {
 			localStorage.setItem('token', data?.token)
-			// this.$toast.add({severity:'success', summary: 'Successful', detail: data, life: 3000});
 
 			window.location.href = '/#/landing';
 		}else{
