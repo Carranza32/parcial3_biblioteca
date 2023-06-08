@@ -188,9 +188,30 @@
 
 				<template #footer>
 					<Button label="No" icon="pi pi-times" @click="detailDialog = false" text />
-					<Button label="Prestar" icon="pi pi-check" @click="detailDialog = false" autofocus />
+					<Button label="Prestar" icon="pi pi-check" @click="showDateDialog()" autofocus />
 				</template>
 			</Dialog>
+
+<!-- a213 -->
+
+<Dialog v-model:visible="dateDialog" modal header="Escoja fecha que regresara el libro" :style="{ width: '50vw' }">
+				<div class="card">
+					<div class="card-container">
+						<div class="flex">
+							<div class="field">
+								<label for="email1">Fecha de devolucion</label>
+								<InputText id="email1" type="Date" />
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<template #footer>
+					<Button label="No" icon="pi pi-times" @click="dateDialog = false" text />
+					<Button label="Prestar" icon="pi pi-check" @click="showDateDialog()" autofocus />
+				</template>
+			</Dialog>
+
         </div>
     </div>
     <AppConfig simple />
@@ -206,7 +227,8 @@ export default {
             books: null,
 			layout: 'grid',
 			detailDialog: false,
-			book: null
+			book: null,
+			dateDialog: false
         }
     },
 	created() {
@@ -234,6 +256,12 @@ export default {
 		showDetail(data) {
 			this.book = data;
 			this.detailDialog = true;
+		},
+		showDateDialog() {
+			this.dateDialog = true;
+		},
+		prestarLibro() {
+			
 		}
 	}
 }

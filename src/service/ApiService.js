@@ -1,6 +1,6 @@
-import axios from 'axios'
+import axios from 'axios';
 
-const _baseUrl = 'http://localhost:8000/api/';
+const _baseUrl = 'http://localhost:8080/api/';
 
 const config = {
     headers: {
@@ -13,8 +13,7 @@ const config = {
 export default class ApiService {
     async getWithToken(url) {
         const response = await axios.get(`${_baseUrl}${url}`, config);
-      
-        return response.data;
+              return response.data;
     }
     
     async postWithToken(url, body) {
@@ -82,4 +81,9 @@ export default class ApiService {
         const queryParams = params ? Object.keys(params).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&') : '';
         return fetch('https://jsonplaceholder.typicode.com/users?' + queryParams).then(res => res.json())
     }
+
+    // //Prestamos
+
+
+
 }
