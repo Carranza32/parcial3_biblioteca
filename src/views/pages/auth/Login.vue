@@ -2,8 +2,10 @@
 import { useLayout } from '@/layout/composables/layout';
 import { ref, computed } from 'vue';
 import AppConfig from '@/layout/AppConfig.vue';
+import ApiService from '@/service/ApiService';
 
 const { layoutConfig } = useLayout();
+const apiService = new ApiService();
 const email = ref('');
 const password = ref('');
 const checked = ref(false);
@@ -11,17 +13,40 @@ const checked = ref(false);
 const logoUrl = computed(() => {
     return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
 });
+
+const login = () => {
+	console.log(email.value, password.value, checked.value);
+
+	apiService.post('auth/login', { email: email.value, password: password.value }).then(({ data }) => {
+		console.log(data?.token);
+		
+		// this.$router.push({ name: 'Login' });
+
+		if (data?.token != null || data?.token != undefined) {
+			localStorage.setItem('token', data?.token)
+			// this.$toast.add({severity:'success', summary: 'Successful', detail: data, life: 3000});
+
+			window.location.href = '/#/landing';
+		}else{
+			return
+		}
+	})
+	.catch((error) => {
+		console.log(error);
+	});
+};
 </script>
 
 <template>
     <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+	<Toast />
         <div class="flex flex-column align-items-center justify-content-center">
             <img :src="logoUrl" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0" />
             <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
                 <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius: 53px">
                     <div class="text-center mb-5">
                         <img src="/demo/images/login/avatar.png" alt="Image" height="50" class="mb-3" />
-                        <div class="text-900 text-3xl font-medium mb-3">Welcome, Isabel!</div>
+                        <div class="text-900 text-3xl font-medium mb-3">Inicia sesion!</div>
                         <span class="text-600 font-medium">Sign in to continue</span>
                     </div>
 
@@ -39,7 +64,12 @@ const logoUrl = computed(() => {
                             </div>
                             <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Forgot password?</a>
                         </div>
-                        <Button label="Sign In" class="w-full p-3 text-xl"></Button>
+                        <Button label="Sign In" class="w-full p-3 text-xl" @click="login()"></Button>
+
+						<div class="col-12 mt-5 text-center">
+                            <i class="pi pi-fw pi-arrow-left text-blue-500 mr-2" style="vertical-align: center"></i>
+                            <router-link to="/auth/register" class="text-blue-500">Registrate</router-link>
+                        </div>
                     </div>
                 </div>
             </div>

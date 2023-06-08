@@ -16,7 +16,7 @@ const router = createRouter({
                 {
                     path: '/admin/usuarios',
                     name: 'message',
-                    component: () => import('@/views/uikit/Messages.vue')
+                    component: () => import('@/views/pages/admin/Usuarios.vue')
                 },
                 {
                     path: '/admin/libros',
@@ -65,6 +65,11 @@ const router = createRouter({
             path: '/auth/login',
             name: 'login',
             component: () => import('@/views/pages/auth/Login.vue')
+        },
+        {
+            path: '/auth/register',
+            name: 'register',
+            component: () => import('@/views/pages/auth/Register.vue')
         },
         {
             path: '/auth/access',
